@@ -1,21 +1,20 @@
-// src/app/api/posts/update/route.ts
-import { NextResponse } from "next/server";
-import prisma from "@/utils/prisma";
+import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/utils/prisma";
 
-export async function PATCH(request: Request) {
-  const { id, title, content } = await request.json();
+export async function PUT(req: NextRequest) {
+  try {
+    const { id, title, content } = await req.json();
 
-  if (!id || !title || !content) {
-    return NextResponse.json({ error: "ID, title, and content are required" }, { status: 400 });
+    const updatedPost = await prisma.post.update({
+      where: { id },
+      data: { title, content },
+    });
+
+    return NextResponse.json(updatedPost);
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Failed to update post" },
+      { status: 500 }
+    );
   }
-
-  const post = await prisma.post.update({
-    where: { id },
-    data: {
-      title,
-      content,
-    },
-  });
-
-  return NextResponse.json({ message: "Post updated successfully", post });
 }

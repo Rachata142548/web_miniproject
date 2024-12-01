@@ -1,20 +1,15 @@
-// src/app/api/posts/create/route.ts
-import { NextResponse } from "next/server";
-import prisma from "@/utils/prisma";
+import bcrypt from "bcrypt";
+import prisma from "@/utils/db";
 
-export async function POST(request: Request) {
-  const { title, content } = await request.json();
+const createUser = async (email: string, password: string) => {
+  const hashedPassword = await bcrypt.hash(password, 10);
 
-  if (!title || !content) {
-    return NextResponse.json({ error: "Title and content are required" }, { status: 400 });
-  }
-
-  const post = await prisma.post.create({
+  const newUser = await prisma.user.create({
     data: {
-      title,
-      content,
+      email,
+      password: hashedPassword,
     },
   });
 
-  return NextResponse.json({ message: "Post created successfully", post });
-}
+  return newUser;
+};

@@ -1,17 +1,19 @@
-// src/app/api/posts/delete/route.ts
-import { NextResponse } from "next/server";
-import prisma from "@/utils/prisma";
+import { NextRequest, NextResponse } from "next/server";
+import { prisma } from "@/utils/prisma";
 
-export async function DELETE(request: Request) {
-  const { id } = await request.json();
+export async function DELETE(req: NextRequest) {
+  try {
+    const { id } = await req.json();
 
-  if (!id) {
-    return NextResponse.json({ error: "ID is required" }, { status: 400 });
+    await prisma.post.delete({
+      where: { id },
+    });
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    return NextResponse.json(
+      { error: "Failed to delete post" },
+      { status: 500 }
+    );
   }
-
-  const post = await prisma.post.delete({
-    where: { id },
-  });
-
-  return NextResponse.json({ message: "Post deleted successfully", post });
 }

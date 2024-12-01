@@ -1,15 +1,17 @@
-import prisma from "../../../../utils/prisma";
-import { verifyPassword, generateToken } from "../../../../utils/auth";
+import { NextResponse } from "next/server";
+import { loginUser } from "@/utils/loginUser";
 
-export async function POST(req: Request) {
-  const { email, password } = await req.json();
+export async function POST(request: Request) {
+  const { email, password } = await request.json();
 
-  const user = await prisma.user.findUnique({ where: { email } });
-  if (!user) return new Response(JSON.stringify({ error: "Invalid credentials" }), { status: 401 });
+  if (!email || !password) {
+    return NextResponse.json({ error: "Email and password are required" }, { status: 400 });
+  }
 
-  const isValid = await verifyPassword(password, user.password);
-  if (!isValid) return new Response(JSON.stringify({ error: "Invalid credentials" }), { status: 401 });
-
-  const token = generateToken(user.id);
-  return new Response(JSON.stringify({ token }), { status: 200 });
+  try {
+    const token = await loginUser(email, password);
+    return NextResponse.json({ message: "Login successful", token });
+  } catch (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 }
