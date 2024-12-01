@@ -7,8 +7,8 @@
     "strict": true,
     "noEmit": true,
     "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
+    "module": "commonjs",          // เปลี่ยนจาก "esnext" เป็น "commonjs"
+    "moduleResolution": "node",    // เปลี่ยนจาก "bundler" เป็น "node"
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
@@ -22,6 +22,15 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "prisma/**/*.ts"              // เพิ่ม "prisma/**/*.ts" เพื่อรวมไฟล์ Prisma
+  ],
+  "exclude": [
+    "node_modules",
+    "prisma"                      // อาจจะเพิ่ม "prisma" ถ้าไม่ต้องการให้ TypeScript คอมไพล์ไฟล์ใน Prisma
+  ]
 }

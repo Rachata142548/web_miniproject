@@ -1,34 +1,53 @@
-// src/app/api/items/route.ts
-
-import { NextResponse } from "next";
-import { prisma } from "../../utils/prisma"; // หรือใช้ฐานข้อมูลที่คุณเชื่อมต่อ
-
-export async function GET() {
-  const items = await prisma.item.findMany();
-  return NextResponse.json(items);
-}
+import { NextResponse } from "next/server";
+import prisma from "@/utils/prisma"; // เรียกใช้ Prisma Client
 
 export async function POST(req: Request) {
-  const { name } = await req.json();
-  const newItem = await prisma.item.create({
-    data: { name },
-  });
-  return NextResponse.json(newItem);
+  try {
+    console.log("Request received for POST /api/items");
+
+    // อ่านข้อมูลจาก Request Body
+    const body = await req.json();
+    console.log("Request body:", body);
+
+    const { name } = body;
+
+    // ตรวจสอบว่าชื่อ (name) ถูกส่งมาหรือไม่
+    if (!name) {
+      console.warn("Validation failed: Missing 'name' in request body");
+      return NextResponse.json(
+        { error: "Name is required" },
+        { status: 400 }
+      );
+    }
+
+    // สร้างรายการใหม่ในฐานข้อมูล
+    const newItem = await prisma.item.create({
+      data: { name },
+    });
+
+    // แสดงข้อมูลที่เพิ่มสำเร็จใน log
+    console.log("Item added successfully:", newItem);
+    return NextResponse.json(newItem);
+  } catch (error) {
+    // แสดงข้อผิดพลาดใน log
+    console.error("Error adding item:", error);
+    return NextResponse.json(
+      { error: "Failed to add item" },
+      { status: 500 }
+    );
+  }
 }
 
-export async function PUT(req: Request) {
-  const { id, name } = await req.json();
-  const updatedItem = await prisma.item.update({
-    where: { id },
-    data: { name },
-  });
-  return NextResponse.json(updatedItem);
-}
+export async function GET() {
+  try {
+    console.log("Fetching items...");
 
-export async function DELETE(req: Request) {
-  const { id } = await req.json();
-  const deletedItem = await prisma.item.delete({
-    where: { id },
-  });
-  return NextResponse.json(deletedItem);
+    const items = await prisma.item.findMany();
+    console.log("Fetched items:", items);
+
+    return NextResponse.json(items);
+  } catch (error) {
+    console.error("Error fetching items:", error);
+    return NextResponse.json({ error: "Failed to fetch items" }, { status: 500 });
+  }
 }
