@@ -1,68 +1,121 @@
-// src/app/dashboard/manage-items/page.tsx
-"use client";
+'use client';
 
-import React, { useState } from "react";
+import { useState } from 'react';
+import Form from '@/component/Form';
 
-export default function ManageItems() {
-  const [items, setItems] = useState([{ id: 1, name: "Item 1" }, { id: 2, name: "Item 2" }]);
-  const [newItem, setNewItem] = useState("");
+const ManageItemsPage = () => {
+  const [formData, setFormData] = useState({ name: '', imageUrl: '' });
+  const [items, setItems] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [selectedItem, setSelectedItem] = useState<any | null>(null);
 
-  const handleAddItem = () => {
-    setItems((prevItems) => [...prevItems, { id: prevItems.length + 1, name: newItem }]);
-    setNewItem(""); // เคลียร์ช่องกรอกหลังจากเพิ่ม
+  const handleAddItem = async (data: { name: string; imageUrl: string }) => {
+    setIsLoading(true);
+    setErrorMessage('');
+    try {
+      if (!data.name || !data.imageUrl) {
+        throw new Error('Name and Image URL are required!');
+      }
+      const itemData = { name: data.name, imageUrl: data.imageUrl };
+      if (editingIndex === null) {
+        setItems([...items, itemData]);
+      } else {
+        const updatedItems = [...items];
+        updatedItems[editingIndex] = itemData;
+        setItems(updatedItems);
+        setEditingIndex(null);
+      }
+      setFormData({ name: '', imageUrl: '' });
+    } catch (error: any) {
+      setErrorMessage(error.message || 'An unexpected error occurred.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleDeleteItem = (id: number) => {
-    setItems(items.filter(item => item.id !== id));
+  const handleDeleteImage = (index: number) => {
+    setItems(items.filter((_, i) => i !== index));
   };
 
-  const handleEditItem = (id: number, newName: string) => {
-    setItems(items.map(item => item.id === id ? { ...item, name: newName } : item));
+  const handleEditItem = (index: number) => {
+    setFormData({
+      name: items[index].name,
+      imageUrl: items[index].imageUrl,
+    });
+    setEditingIndex(index);
+  };
+
+  const handleImageClick = (item: any) => {
+    setSelectedItem(item); 
+  };
+
+  const handleCloseModal = () => {
+    setSelectedItem(null); 
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100 text-black">
-      <div className="bg-white p-6 rounded shadow-lg w-full max-w-sm">
-        <h2 className="text-xl font-semibold mb-4">Manage Items</h2>
-        <div className="mb-4">
-          <input
-            type="text"
-            className="w-full px-3 py-2 border rounded"
-            value={newItem}
-            onChange={(e) => setNewItem(e.target.value)}
-            placeholder="Add new item"
-          />
-          <button
-            className="w-full mt-2 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded"
-            onClick={handleAddItem}
-            disabled={!newItem}
-          >
-            Add Item
-          </button>
-        </div>
+    <div className="container mx-auto p-6 bg-cover bg-no-repeat bg-center rounded-lg shadow-lg max-w-3xl text-black">
+      <h1 className="text-3xl font-semibold text-center mb-8 text-white">Manage Items</h1>
 
-        <ul>
-          {items.map(item => (
-            <li key={item.id} className="flex justify-between items-center mb-2">
-              <span>{item.name}</span>
-              <div>
+      <Form onSubmit={handleAddItem} />
+
+      <div className="mt-8 space-y-8">
+        <h2 className="text-2xl font-semibold text-gray-800 mb-4">Items List</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {items.map((item, index) => (
+            <div key={index} className="flex flex-col items-center bg-white p-4 rounded-lg shadow-sm hover:shadow-lg transition-shadow">
+              <h3 className="text-xl font-semibold text-gray-700">{item.name}</h3>
+              <img
+                src={item.imageUrl}
+                alt={item.name}
+                className="w-40 h-40 mt-2 rounded-lg shadow-md cursor-pointer"
+                onClick={() => handleImageClick(item)} 
+              />
+              <div className="space-x-3 mt-4">
                 <button
-                  className="mr-2 text-yellow-500"
-                  onClick={() => handleEditItem(item.id, prompt("Edit name:", item.name) || item.name)}
+                  onClick={() => handleEditItem(index)}
+                  className="bg-yellow-500 text-white p-2 rounded-lg hover:bg-yellow-600 transition"
                 >
                   Edit
                 </button>
                 <button
-                  className="text-red-500"
-                  onClick={() => handleDeleteItem(item.id)}
+                  onClick={() => handleDeleteImage(index)}
+                  className="bg-red-500 text-white p-2 rounded-lg hover:bg-red-600 transition"
                 >
                   Delete
                 </button>
               </div>
-            </li>
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
+
+      {selectedItem && (
+        <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded-lg max-w-md w-full">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Item Details</h2>
+            <div>
+              <img
+                src={selectedItem.imageUrl}
+                alt={selectedItem.name}
+                className="w-full h-64 object-cover rounded-lg mb-4"
+              />
+              <h3 className="text-xl font-semibold text-gray-700">{selectedItem.name}</h3>
+              <p className="text-gray-600 mt-2">Here you can add any additional information about this item.</p>
+              <button
+                onClick={handleCloseModal}
+                className="mt-4 bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700 transition"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
-}
+}; 
+
+export default ManageItemsPage;

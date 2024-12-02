@@ -1,47 +1,36 @@
-import bcrypt from "bcryptjs";
-import { NextResponse } from "next/server";
-import prisma from "@/utils/prisma";
+import { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcryptjs';
+import { NextResponse } from 'next/server';
 
-export async function POST(req: Request) {
-  const { email, password } = await req.json();
+const prisma = new PrismaClient();
 
-  if (!email || !password) {
-    return NextResponse.json(
-      { error: "Email and password are required." },
-      { status: 400 }
-    );
-  }
-
+// สร้างฟังก์ชัน POST แบบ named export
+export async function POST(req) {
   try {
+    const { email, password } = await req.json();
+
+    // ตรวจสอบว่ามีผู้ใช้งานที่มี email นี้แล้วหรือไม่
     const existingUser = await prisma.user.findUnique({
       where: { email },
     });
 
     if (existingUser) {
-      return NextResponse.json(
-        { error: "User with this email already exists." },
-        { status: 400 }
-      );
+      return NextResponse.json({ message: 'User already exists' }, { status: 409 });
     }
 
+    // เข้ารหัส password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await prisma.user.create({
+    // สร้างผู้ใช้งานใหม่
+    const newUser = await prisma.user.create({
       data: {
         email,
         password: hashedPassword,
       },
     });
 
-    return NextResponse.json(
-      { message: "User registered successfully!" },
-      { status: 201 }
-    );
+    return NextResponse.json({ message: 'User registered successfully' }, { status: 201 });
   } catch (error) {
-    console.error("Register error:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
   }
 }

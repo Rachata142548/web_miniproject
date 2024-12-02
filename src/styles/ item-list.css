@@ -1,0 +1,33 @@
+/* src/styles/item-list.css */
+.item-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .item-card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 200px;
+    text-align: center;
+  }
+  
+  .item-card img {
+    max-width: 100%;
+    border-radius: 10px;
+  }
+  
+  .item-card button {
+    margin-top: 10px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .item-card button:hover {
+    background-color: #0056b3;
+    color: #fff;
+  }

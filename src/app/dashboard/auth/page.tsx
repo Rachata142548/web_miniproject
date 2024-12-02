@@ -66,7 +66,14 @@ export default function AuthPage() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100 text-black">
+    <div 
+      className="flex justify-center items-center min-h-screen text-black" 
+      style={{
+        backgroundImage: "url('https://rstatic.stores.musicarts.com/locations/3450_gonzales_la.jpg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
       <form
         onSubmit={handleSubmit}
         className="bg-white p-6 rounded shadow-lg w-full max-w-sm"
@@ -177,9 +184,7 @@ export default function AuthPage() {
         href="/dashboard/auth/manage-items"
         className="bg-white text-blue-500 px-6 py-3 rounded-full text-lg font-semibold shadow-lg transform transition-transform duration-300 hover:bg-blue-600 hover:text-white hover:scale-105"
       >
-
       </Link>
     </div>
-    
   );
 }

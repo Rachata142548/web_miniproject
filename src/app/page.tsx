@@ -5,22 +5,43 @@ export default function HomePage() {
   return (
     <>
       <Head>
-        <title>Welcome to My Mini Project</title>
-        <meta name="description" content="Explore features and start building something amazing with Next.js." />
+        <title>Welcome to My Music Store</title>
+        <meta
+          name="description"
+          content="Discover the best instruments and music accessories at our store!"
+        />
       </Head>
-      <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-r from-blue-500 to-purple-600 text-white">
-        <h1 className="text-5xl font-extrabold mb-6 text-center drop-shadow-lg">
-          Welcome to My Mini Project
-        </h1>
-        <p className="text-xl mb-6 max-w-lg text-center">
-          This is the home page of my Next.js project. Explore the features and start building something amazing!
-        </p>
-        <Link
-          href="/dashboard/auth"
-          className="bg-white text-blue-500 px-6 py-3 rounded-full text-lg font-semibold shadow-lg transform transition-transform duration-300 hover:bg-blue-600 hover:text-white hover:scale-105"
-        >
-          Get Started
-        </Link>
+      <div
+        className="flex flex-col items-center justify-center h-screen bg-cover bg-center text-white"
+        style={{
+          backgroundImage:
+            "url('https://images.squarespace-cdn.com/content/v1/6233ac9f033ebc66f4083513/01cc016f-5169-4f2d-8bc8-e8810a4488b0/_DSC7478.jpg')",
+        }}
+      >
+        {/* เนื้อหา Body */}
+        <div className="bg-black bg-opacity-50 p-10 rounded-lg text-center">
+          <h1 className="text-6xl font-bold mb-6">
+            Welcome to My Music Store
+          </h1>
+          <p className="text-2xl mb-6">
+            Explore the finest instruments and musical gear!
+          </p>
+          {/* ลิงก์แบบใช้ Link (Next.js) */}
+          <Link
+            href="/dashboard/auth"
+            className="bg-blue-500 text-white px-6 py-3 rounded-full text-lg font-semibold shadow-lg transition-transform transform hover:bg-purple-600 hover:scale-105"
+          >
+            Next Page
+          </Link>
+          {/* ลิงก์ไปยังเว็บไซต์ภายนอก */}
+          <a
+            href="https://example.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block mt-4 text-blue-300 underline hover:text-blue-500"
+          >
+          </a>
+        </div>
       </div>
     </>
   );

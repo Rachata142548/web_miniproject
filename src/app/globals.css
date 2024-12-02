@@ -15,8 +15,17 @@
 }
 
 body {
-  @apply bg-gray-50 text-gray-900;
+  @apply bg-white text-gray-900;
   color: var(--foreground);
-  background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+  background-image: url('https://www.musicstore.com/INTERSHOP/static/WFS/MusicStore-Site/MusicStoreShop/MusicStore-MusicStoreShop/en_US/static-pages/Abteilungsinfos/Header/DJ_Header.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+/* ใช้กรอบด้านในสีขาว */
+.container {
+  background-color: #ffffff;
+  @apply p-6 rounded-lg shadow-lg;
 }

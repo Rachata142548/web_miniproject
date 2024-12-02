@@ -26,6 +26,9 @@ model Post {
 }
 
 model Item {
-  id   Int    @id @default(autoincrement())
-  name String
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?  // ฟิลด์นี้สามารถเป็น null ได้
+  price       Float
+  createdAt   DateTime @default(now())
 }
