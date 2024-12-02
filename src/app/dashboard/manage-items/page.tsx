@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Form from '@/component/Form';
+import { useRouter } from 'next/navigation';
 
 const ManageItemsPage = () => {
   const [formData, setFormData] = useState({ name: '', imageUrl: '' });
@@ -10,6 +11,7 @@ const ManageItemsPage = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [selectedItem, setSelectedItem] = useState<any | null>(null);
+  const router = useRouter(); // ใช้ router สำหรับการรีไดเรกต์
 
   const handleAddItem = async (data: { name: string; imageUrl: string }) => {
     setIsLoading(true);
@@ -48,11 +50,21 @@ const ManageItemsPage = () => {
   };
 
   const handleImageClick = (item: any) => {
-    setSelectedItem(item); 
+    setSelectedItem(item);
   };
 
   const handleCloseModal = () => {
-    setSelectedItem(null); 
+    setSelectedItem(null);
+  };
+
+  const handleLogout = async () => {
+    try {
+      // ลบข้อมูลที่เกี่ยวข้องกับการล็อกอิน (สามารถใช้การลบ cookie หรือ localStorage)
+      localStorage.removeItem('user');  // ตัวอย่างการลบข้อมูลจาก localStorage
+      router.push('/login'); // รีไดเรกต์ไปหน้าล็อกอิน
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
   };
 
   return (
@@ -71,7 +83,7 @@ const ManageItemsPage = () => {
                 src={item.imageUrl}
                 alt={item.name}
                 className="w-40 h-40 mt-2 rounded-lg shadow-md cursor-pointer"
-                onClick={() => handleImageClick(item)} 
+                onClick={() => handleImageClick(item)}
               />
               <div className="space-x-3 mt-4">
                 <button
@@ -114,8 +126,16 @@ const ManageItemsPage = () => {
           </div>
         </div>
       )}
+
+      {/* ปุ่ม Logout */}
+      <button
+        onClick={handleLogout}
+        className="mt-8 bg-red-500 text-white p-2 rounded-lg hover:bg-red-600 transition"
+      >
+        Logout
+      </button>
     </div>
   );
-}; 
+};
 
 export default ManageItemsPage;
