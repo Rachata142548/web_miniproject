@@ -4,12 +4,11 @@ import { NextResponse } from 'next/server';
 
 const prisma = new PrismaClient();
 
-// สร้างฟังก์ชัน POST แบบ named export
 export async function POST(req) {
   try {
-    const { email, password } = await req.json();
+    const { email, password, role } = await req.json();
 
-    // ตรวจสอบว่ามีผู้ใช้งานที่มี email นี้แล้วหรือไม่
+    // ตรวจสอบว่าอีเมลนี้มีผู้ใช้งานในระบบหรือยัง
     const existingUser = await prisma.user.findUnique({
       where: { email },
     });
@@ -18,7 +17,7 @@ export async function POST(req) {
       return NextResponse.json({ message: 'User already exists' }, { status: 409 });
     }
 
-    // เข้ารหัส password
+    // เข้ารหัสรหัสผ่านก่อนบันทึกในฐานข้อมูล
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // สร้างผู้ใช้งานใหม่
@@ -26,6 +25,7 @@ export async function POST(req) {
       data: {
         email,
         password: hashedPassword,
+        role: role || 'Viewer', // Default role เป็น Viewer หากไม่มีการระบุ
       },
     });
 

@@ -1,31 +1,21 @@
+// src/app/api/items/route.ts
 import { NextResponse } from 'next/server';
 
-export async function POST(req: Request) {
-  try {
-    const body = await req.json();
-    const { name, imageUrl } = body;
+export async function GET() {
+  const items = [
+    {
+      id: 1,
+      name: 'Item 1',
+      price: '$20',
+      imageUrl: '/images/item1.jpeg', // ตั้งค่าภาพให้ถูกต้อง
+    },
+    {
+      id: 2,
+      name: 'Item 2',
+      price: '$30',
+      imageUrl: '/images/item2.jpg', // ตั้งค่าภาพให้ถูกต้อง
+    },
+  ];
 
-    if (!name || !imageUrl) {
-      return NextResponse.json(
-        { error: 'Name and Image URL are required!' },
-        { status: 400 }
-      );
-    }
-
-    // ตัวอย่าง: บันทึก item (ในฐานข้อมูล หรือไฟล์ JSON)
-    const fs = require('fs');
-    const path = require('path');
-    const filePath = path.join('public', 'items.json');
-
-    const itemData = { name, imageUrl };
-    fs.appendFileSync(filePath, JSON.stringify(itemData) + '\n');
-
-    return NextResponse.json({ message: 'Item added successfully' });
-  } catch (error) {
-    console.error('Error:', error);
-    return NextResponse.json(
-      { error: 'Failed to add item' },
-      { status: 500 }
-    );
-  }
+  return NextResponse.json(items);
 }

@@ -1,19 +1,19 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
+// schema.prisma
 generator client {
   provider = "prisma-client-js"
 }
 
+// schema.prisma
 datasource db {
   provider = "sqlite"
-  url      = env("DATABASE_URL")
+  url      = "file:./dev.db"
 }
- 
+
 model User {
   id       Int      @id @default(autoincrement())
   email    String   @unique
   password String
+  role     String   @default("Viewer") // เพิ่มฟิลด์ role เพื่อกำหนดบทบาท
   posts    Post[]
 }
 
@@ -26,9 +26,9 @@ model Post {
 }
 
 model Item {
-  id          Int      @id @default(autoincrement())
-  name        String
-  description String?  // ฟิลด์นี้สามารถเป็น null ได้
-  price       Float
-  createdAt   DateTime @default(now())
+  id        Int    @id @default(autoincrement())
+  name      String
+  imageUrl  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
