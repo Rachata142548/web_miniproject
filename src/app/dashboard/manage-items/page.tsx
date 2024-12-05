@@ -249,23 +249,32 @@ const ManageItems = () => {
                   className="w-full h-48 object-cover rounded-md mb-4 text-black"
                 />
                 <h2 className="text-xl font-bold text-gray-900">{item.name}</h2>
-                <p className="text-lg text-gray-700">{item.price}</p>
-                {role === "Admin" && (
-                  <div className="flex justify-between items-center mt-4 text-black">
-                    <button
-                      onClick={() => handleEdit(item)}
-                      className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition duration-300"
-                    >
-                      Edit
+                <p className="text-lg text-gray-700 mb-4">{item.price} THB</p>
+                <div className="flex justify-between">
+                  {role === "Admin" ? (
+                    <>
+                      <button
+                        onClick={() => handleEdit(item)}
+                        className="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition duration-300"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDelete(item.id)}
+                        className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition duration-300"
+                      >
+                        Delete
+                      </button>
+                      <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300">
+                        Price
+                      </button>
+                    </>
+                  ) : (
+                    <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300">
+                      Details
                     </button>
-                    <button
-                      onClick={() => handleDelete(item.id)}
-                      className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition duration-300"
-                    >
-                      Delete
-                    </button>
-                  </div>
-                )}
+                  )}
+                </div>
               </>
             )}
           </div>
