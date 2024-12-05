@@ -28,7 +28,7 @@ export default function HomePage() {
           </p>
           {/* ลิงก์แบบใช้ Link (Next.js) */}
           <Link
-            href="/dashboard/auth"
+            href="/dashboard/auth/login"
             className="bg-blue-500 text-white px-6 py-3 rounded-full text-lg font-semibold shadow-lg transition-transform transform hover:bg-purple-600 hover:scale-105"
           >
             Next Page

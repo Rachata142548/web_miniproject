@@ -1,36 +1,31 @@
-import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcryptjs';
+// src/app/api/auth/register/route.ts
 import { NextResponse } from 'next/server';
+import bcrypt from 'bcryptjs';
+import prisma from '@/utils/db'; 
 
-const prisma = new PrismaClient();
+export async function POST(req: Request) {
+  const { email, password, role } = await req.json();
 
-export async function POST(req) {
-  try {
-    const { email, password, role } = await req.json();
+  // ตรวจสอบว่ามีผู้ใช้งานที่มีอีเมลนี้อยู่หรือไม่
+  const existingUser = await prisma.user.findUnique({
+    where: { email },
+  });
 
-    // ตรวจสอบว่าอีเมลนี้มีผู้ใช้งานในระบบหรือยัง
-    const existingUser = await prisma.user.findUnique({
-      where: { email },
-    });
-
-    if (existingUser) {
-      return NextResponse.json({ message: 'User already exists' }, { status: 409 });
-    }
-
-    // เข้ารหัสรหัสผ่านก่อนบันทึกในฐานข้อมูล
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    // สร้างผู้ใช้งานใหม่
-    const newUser = await prisma.user.create({
-      data: {
-        email,
-        password: hashedPassword,
-        role: role || 'Viewer', // Default role เป็น Viewer หากไม่มีการระบุ
-      },
-    });
-
-    return NextResponse.json({ message: 'User registered successfully' }, { status: 201 });
-  } catch (error) {
-    return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
+  if (existingUser) {
+    return NextResponse.json({ message: 'ผู้ใช้งานนี้มีอยู่แล้ว' }, { status: 400 });
   }
+
+  // ทำการเข้ารหัสรหัสผ่านก่อนที่จะเก็บในฐานข้อมูล
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  // สร้างผู้ใช้งานในฐานข้อมูล
+  const newUser = await prisma.user.create({
+    data: {
+      email,
+      password: hashedPassword,
+      role: role || 'Viewer', // กำหนดบทบาทเริ่มต้นเป็น 'Viewer'
+    },
+  });
+
+  return NextResponse.json({ message: 'สร้างผู้ใช้งานสำเร็จ' }, { status: 201 });
 }

@@ -1,38 +1,44 @@
 {
   "compilerOptions": {
-    "target": "ES2017",                     // กำหนดเป้าหมาย JavaScript เวอร์ชัน ES2017
-    "lib": ["dom", "dom.iterable", "esnext"], // รองรับ DOM และ ESNext features
-    "allowJs": true,                        // อนุญาตไฟล์ .js
-    "skipLibCheck": true,                   // ข้ามการตรวจสอบไลบรารีเพื่อเร่งความเร็ว
-    "strict": true,                         // เปิดใช้ TypeScript แบบ Strict Mode
-    "noEmit": true,                         // ป้องกันการสร้างไฟล์ output
-    "esModuleInterop": true,                // เปิดใช้งาน ES Module Interop
-    "module": "esnext",                     // ใช้โมดูล ESNext
-    "moduleResolution": "node",             // กำหนดวิธีการแก้ไขโมดูลเป็นแบบ Node.js
-    "resolveJsonModule": true,              // รองรับการนำเข้า JSON
-    "isolatedModules": true,                // รองรับ isolated modules (แนะนำสำหรับ Next.js)
-    "jsx": "preserve",                      // เก็บ JSX ไว้ในไฟล์ output (เหมาะสำหรับ React)
-    "incremental": true,                    // เปิดใช้งาน incremental compilation
-    "baseUrl": ".",                         // กำหนดฐานสำหรับ path
+    "target": "ES2017", // กำหนดเป้าหมาย JavaScript เวอร์ชัน ES2017
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ], // รองรับ DOM และ ESNext features
+    "allowJs": true, // อนุญาตไฟล์ .js
+    "skipLibCheck": true, // ข้ามการตรวจสอบไลบรารีเพื่อเร่งความเร็ว
+    "strict": true, // เปิดใช้ TypeScript แบบ Strict Mode
+    "noEmit": true, // ป้องกันการสร้างไฟล์ output
+    "esModuleInterop": true, // เปิดใช้งาน ES Module Interop
+    "module": "commonjs", // ใช้โมดูล ESNext
+    "moduleResolution": "node", // กำหนดวิธีการแก้ไขโมดูลเป็นแบบ Node.js
+    "resolveJsonModule": true, // รองรับการนำเข้า JSON
+    "isolatedModules": true, // รองรับ isolated modules (แนะนำสำหรับ Next.js)
+    "jsx": "preserve", // เก็บ JSX ไว้ในไฟล์ output (เหมาะสำหรับ React)
+    "incremental": true, // เปิดใช้งาน incremental compilation
+    "baseUrl": ".", // กำหนดฐานสำหรับ path
     "paths": {
-      "@/*": ["./src/*"]                    // ตั้งค่า path alias สำหรับ src/
+      "@/*": [
+        "./src/*"
+      ] // ตั้งค่า path alias สำหรับ src/
     },
     "plugins": [
       {
-        "name": "next"                      // เพิ่มปลั๊กอิน Next.js
+        "name": "next" // เพิ่มปลั๊กอิน Next.js
       }
     ]
   },
   "include": [
-    "next-env.d.ts",                        // ใช้ environment definitions ของ Next.js
-    "**/*.ts",                              // รวมไฟล์ .ts
-    "**/*.tsx",                             // รวมไฟล์ .tsx
-    ".next/types/**/*.ts",                  // รวม types ที่ Next.js สร้าง
-    "prisma/**/*.ts"                        // รวมไฟล์ Prisma
+    "next-env.d.ts", // ใช้ environment definitions ของ Next.js
+    "**/*.ts", // รวมไฟล์ .ts
+    "**/*.tsx", // รวมไฟล์ .tsx
+    ".next/types/**/*.ts", // รวม types ที่ Next.js สร้าง
+    "prisma/**/*.ts" // รวมไฟล์ Prisma
   ],
   "exclude": [
-    "node_modules",                         // ยกเว้น node_modules
-    "**/*.test.ts",                         // ยกเว้นไฟล์ทดสอบ TypeScript
-    "**/*.spec.ts"                          // ยกเว้นไฟล์ Spec
+    "node_modules", // ยกเว้น node_modules
+    "**/*.test.ts", // ยกเว้นไฟล์ทดสอบ TypeScript
+    "**/*.spec.ts" // ยกเว้นไฟล์ Spec
   ]
 }

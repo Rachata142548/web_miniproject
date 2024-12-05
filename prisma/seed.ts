@@ -5,11 +5,14 @@ const prisma = new PrismaClient();
 
 async function main() {
   // ตัวอย่างข้อมูล seed
-  const hashedPassword = await bcrypt.hash('password123', 10);
+  const hashedPassword = await bcrypt.hash('12345678', 10);
+
+  // สร้างผู้ใช้ Admin
   await prisma.user.create({
     data: {
-      email: 'user@example.com',
+      email: 'admin@example.com',
       password: hashedPassword,
+      role: 'Admin', // เพิ่มฟิลด์ role และตั้งค่าเป็น 'Admin'
     },
   });
 

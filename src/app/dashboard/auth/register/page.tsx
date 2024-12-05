@@ -1,99 +1,92 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
-export default function RegisterPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [role, setRole] = useState("Viewer"); // กำหนดบทบาท default เป็น Viewer
-  const [errorMessage, setErrorMessage] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-
+const RegisterPage = () => {
   const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [role, setRole] = useState('Viewer');
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
-    setErrorMessage("");
-
-    if (!email || !password) {
-      setErrorMessage("Email and Password are required.");
-      setIsLoading(false);
-      return;
-    }
 
     try {
-      const response = await fetch("/api/auth/register", {
-        method: "POST",
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({ email, password, role }),
       });
 
-      const data = await response.json();
-
       if (response.ok) {
-        alert("Registration successful");
-        router.push("/auth/login"); // เปลี่ยนเส้นทางไปยังหน้าล็อกอินหลังจากสมัครสมาชิก
+        alert('Registration successful');
+        router.push('/dashboard/auth/login');
       } else {
-        setErrorMessage(data.message || "Something went wrong");
+        const data = await response.json();
+        setError(data.message || 'Something went wrong');
       }
-    } catch (error) {
-      setErrorMessage("An unexpected error occurred. Please try again later.");
+    } catch (err) {
+      setError('An unexpected error occurred. Please try again later.');
     }
-
-    setIsLoading(false);
   };
 
   return (
-    <div className="max-w-sm mx-auto">
-      <h1 className="text-xl font-bold mb-4">Register</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label htmlFor="email" className="block">Email</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded"
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="password" className="block">Password</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded"
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="role" className="block">Role</label>
-          <select
-            id="role"
-            value={role}
-            onChange={(e) => setRole(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded"
+    <div className="flex justify-center items-center h-screen">
+      <div className="bg-white p-8 rounded-lg shadow-lg w-96">
+        <h2 className="text-2xl font-semibold text-center mb-4 text-blue-500">Register</h2>
+        {error && <p className="text-red-500 text-sm text-center mb-4">{error}</p>}
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label htmlFor="email" className="block text-sm font-medium text-gray-600">Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="password" className="block text-sm font-medium text-gray-600">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="role" className="block text-sm font-medium text-gray-600">Role</label>
+            <select
+              id="role"
+              name="role"
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+            >
+              <option value="Viewer">Viewer</option>
+              <option value="Admin">Admin</option>
+            </select>
+          </div>
+          <button
+            type="submit"
+            className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600"
           >
-            <option value="Viewer">Viewer</option>
-            <option value="Admin">Admin</option>
-          </select>
-        </div>
-        <button
-          type="submit"
-          className="w-full p-2 bg-blue-500 text-white rounded"
-          disabled={isLoading}
-        >
-          {isLoading ? "Registering..." : "Register"}
-        </button>
-        {errorMessage && <p className="text-red-500">{errorMessage}</p>}
-      </form>
+            Register
+          </button>
+        </form>
+      </div>
     </div>
   );
-}
+};
+
+export default RegisterPage;
