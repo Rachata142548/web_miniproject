@@ -4,16 +4,34 @@ import { NextResponse } from 'next/server';
 let items = [
   {
     id: 1,
-    name: 'Item 1',
-    price: '$20',
+    name: 'Guitar',
+    price: '$19999',
     imageUrl: '/images/item1.jpeg',
   },
   {
     id: 2,
-    name: 'Item 2',
-    price: '$30',
+    name: 'Rock Guitar',
+    price: '$29999',
     imageUrl: '/images/item2.jpg',
   },
+  {
+    id: 3,
+    name: 'Guitar Accoustices',
+    price: '$5990',
+    imageUrl: '/images/item3.jpg',
+  },
+  {
+    id: 4,
+    name: 'Violeen',
+    price: '$30000',
+    imageUrl: '/images/item4.avif',
+  },
+  {
+    id: 5,
+    name: 'Drum',
+    price: '$25000',
+    imageUrl: '/images/item5.webp',
+  }
 ];
 
 // GET: ดึงข้อมูลสินค้าทั้งหมด
