@@ -1,6 +1,6 @@
-'use client'; // ให้ทำงานในฝั่ง Client
+'use client'; // Indicating this is a client-side component
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
 interface User {
   email: string;
@@ -16,13 +16,23 @@ const UserContext = createContext<{
 export const UserProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User>({ email: "", role: "Viewer" });
 
+  const login = (user: User) => {
+    setUser(user);
+  };
+
+  const logout = () => {
+    setUser({ email: "", role: "Viewer" }); // Reset user state on logout
+    // Optionally clear any user-related data from local storage or cookies here
+    console.log("User logged out");
+  };
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const response = await fetch("/api/auth/me");
         const data = await response.json();
         setUser({ email: data.email, role: data.role });
-        console.log("Fetched User:", data); // Debug Log
+        console.log("Fetched User:", data); // Debug log
       } catch (error) {
         console.log("Error fetching user:", error);
       }
@@ -31,24 +41,11 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     fetchUser();
   }, []);
 
-  // ฟังก์ชัน login
-  const login = (user: User) => {
-    setUser(user);
-  };
-
-  // ฟังก์ชัน logout
-  const logout = () => {
-    setUser({ email: "", role: "Viewer" });
-  };
-
   return (
-    <UserContext.Provider value={{ user, login, logout }}>
-      {children}
-    </UserContext.Provider>
+    <UserContext.Provider value={{ user, login, logout }}>{children}</UserContext.Provider>
   );
 };
 
-// นี่คือส่วนสำคัญที่ส่งออก useUser
 export const useUser = () => {
   const context = useContext(UserContext);
   if (!context) {

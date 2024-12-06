@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 
 const RegisterPage = () => {
   const router = useRouter();
+  const [name, setName] = useState(''); // State for the name
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('Viewer');
@@ -19,7 +20,7 @@ const RegisterPage = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password, role }),
+        body: JSON.stringify({ name, email, password, role }), // Include name in the request body
       });
 
       if (response.ok) {
@@ -40,6 +41,18 @@ const RegisterPage = () => {
         <h2 className="text-2xl font-semibold text-center mb-4 text-blue-500">Register</h2>
         {error && <p className="text-red-500 text-sm text-center mb-4">{error}</p>}
         <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label htmlFor="name" className="block text-sm font-medium text-gray-600">Name</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
+            />
+          </div>
           <div className="mb-4">
             <label htmlFor="email" className="block text-sm font-medium text-gray-600">Email</label>
             <input

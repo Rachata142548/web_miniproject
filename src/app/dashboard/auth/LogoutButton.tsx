@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useUser } from "@/app/context/UserContext"; // นำเข้า UserContext
+import { useUser } from "@/app/context/UserContext";  // นำเข้า useUser
 import { useState } from "react";
 
 const LogoutButton = () => {
@@ -13,6 +13,7 @@ const LogoutButton = () => {
     setLoading(true);
     try {
       await logout(); // เรียกใช้งาน logout
+      router.push("/login"); // เปลี่ยนเส้นทางไปหน้า login
     } catch (error) {
       console.log("Logout failed", error);
     } finally {

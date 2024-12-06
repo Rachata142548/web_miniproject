@@ -5,31 +5,31 @@ let items = [
   {
     id: 1,
     name: 'Guitar',
-    price: '$19999',
+    price: '19999',
     imageUrl: '/images/item1.jpeg',
   },
   {
     id: 2,
     name: 'Rock Guitar',
-    price: '$29999',
+    price: '29999',
     imageUrl: '/images/item2.jpg',
   },
   {
     id: 3,
-    name: 'Guitar Accoustices',
-    price: '$5990',
+    name: 'Guitar Acoustic',
+    price: '5990',
     imageUrl: '/images/item3.jpg',
   },
   {
     id: 4,
-    name: 'Violeen',
-    price: '$30000',
+    name: 'Violin',
+    price: '30000',
     imageUrl: '/images/item4.avif',
   },
   {
     id: 5,
     name: 'Drum',
-    price: '$25000',
+    price: '25000',
     imageUrl: '/images/item5.webp',
   }
 ];
